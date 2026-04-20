@@ -1,0 +1,83 @@
+import type { Product } from '../types';
+
+const sampleImages = [
+  'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80',
+  'https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=600&q=80',
+  'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=600&q=80',
+  'https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=600&q=80',
+  'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80',
+  'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=600&q=80',
+  'https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?w=600&q=80',
+  'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=600&q=80',
+];
+
+export const initialProducts: Product[] = [
+  {
+    id: '1',
+    name: 'Reloj Minimalista Negro',
+    price: 129.99,
+    originalPrice: 179.99,
+    description: 'Reloj de cuarzo con correa de cuero genuino. Diseño elegante y atemporal.',
+    category: 'Accesorios',
+    image: sampleImages[0],
+    stock: 15,
+    featured: true,
+    createdAt: new Date('2024-01-10'),
+  },
+  {
+    id: '2',
+    name: 'Zapatillas Urban Pro',
+    price: 89.99,
+    description: 'Calzado urbano de alto rendimiento con suela de goma premium.',
+    category: 'Calzado',
+    image: sampleImages[1],
+    stock: 30,
+    featured: true,
+    createdAt: new Date('2024-01-12'),
+  },
+  {
+    id: '3',
+    name: 'Perfume Black Edition',
+    price: 59.99,
+    originalPrice: 79.99,
+    description: 'Fragancia masculina con notas de madera y cuero. 100ml.',
+    category: 'Belleza',
+    image: sampleImages[2],
+    stock: 20,
+    featured: true,
+    createdAt: new Date('2024-01-15'),
+  },
+  {
+    id: '4',
+    name: 'Mochila Executive',
+    price: 74.99,
+    description: 'Mochila de tela impermeable con compartimentos organizados.',
+    category: 'Bolsos',
+    image: sampleImages[4],
+    stock: 12,
+    createdAt: new Date('2024-01-18'),
+  },
+  {
+    id: '5',
+    name: 'Cámara Vintage',
+    price: 149.99,
+    originalPrice: 199.99,
+    description: 'Cámara analógica retro con lente de 35mm. Perfecta para coleccionistas.',
+    category: 'Tecnología',
+    image: sampleImages[5],
+    stock: 8,
+    createdAt: new Date('2024-01-20'),
+  },
+  {
+    id: '6',
+    name: 'Sneakers Classic White',
+    price: 99.99,
+    description: 'Zapatillas clásicas en blanco puro con suela vulcanizada.',
+    category: 'Calzado',
+    image: sampleImages[6],
+    stock: 25,
+    createdAt: new Date('2024-01-22'),
+  },
+];
+
+export const categories = ['Todos', 'Accesorios', 'Calzado', 'Belleza', 'Bolsos', 'Tecnología', 'Ropa'];
