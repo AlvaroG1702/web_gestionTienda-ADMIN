@@ -1,28 +1,29 @@
 import { useState } from 'react';
 import { useStore } from '../context/StoreContext';
-import type { Product } from '../types';
+import type { Producto } from '../types';
 
-type SortBy = 'name' | 'price' | 'stock';
+type SortBy = 'nombre' | 'precio' | 'margen';
 
-export function useProducts() {
-  const { products } = useStore();
+export function useProducts(options?: { onlyActive?: boolean }) {
+  const { productos } = useStore();
   const [modalOpen, setModalOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Product | undefined>(undefined);
+  const [editingProduct, setEditingProduct] = useState<Producto | undefined>(undefined);
   const [search, setSearch] = useState('');
-  const [sortBy, setSortBy] = useState<SortBy>('name');
+  const [sortBy, setSortBy] = useState<SortBy>('nombre');
 
-  const filtered = products
-    .filter(p =>
-      p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.category.toLowerCase().includes(search.toLowerCase())
-    )
+  const filtered = productos
+    .filter(p => {
+      if (options?.onlyActive && !p.Estado) return false;
+      return p.Nombre.toLowerCase().includes(search.toLowerCase()) ||
+        (p.NombreCategoria ?? '').toLowerCase().includes(search.toLowerCase());
+    })
     .sort((a, b) => {
-      if (sortBy === 'price') return b.price - a.price;
-      if (sortBy === 'stock') return a.stock - b.stock;
-      return a.name.localeCompare(b.name);
+      if (sortBy === 'precio') return (b.PrecioVenta ?? 0) - (a.PrecioVenta ?? 0);
+      if (sortBy === 'margen') return (Number(b.MargenGanancia) ?? 0) - (Number(a.MargenGanancia) ?? 0);
+      return a.Nombre.localeCompare(b.Nombre);
     });
 
-  const handleEdit = (product: Product) => {
+  const handleEdit = (product: Producto) => {
     setEditingProduct(product);
     setModalOpen(true);
   };

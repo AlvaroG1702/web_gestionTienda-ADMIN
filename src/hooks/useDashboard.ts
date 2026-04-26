@@ -1,55 +1,74 @@
 import { useStore } from '../context/StoreContext';
 
 export function useDashboard() {
-  const { products } = useStore();
+  const { productos, loadingProductos } = useStore();
 
-  const totalValue = products.reduce((sum, p) => sum + p.price * p.stock, 0);
+  const totalValorVenta = productos.reduce((sum, p) => sum + (p.PrecioVenta ?? 0), 0);
 
   const stats = [
     {
       key: 'productos',
-      value: products.length,
+      value: loadingProductos ? '...' : productos.length,
       label: 'Total Productos',
-      sub: 'en catálogo',
+      sub: 'en catálogo activo',
       color: 'bg-blue-50 text-blue-600',
     },
     {
-      key: 'destacados',
-      value: products.filter(p => p.featured).length,
-      label: 'Destacados',
-      sub: 'productos activos',
+      key: 'categorias',
+      value: loadingProductos ? '...' : new Set(productos.map(p => p.NombreCategoria)).size,
+      label: 'Categorías',
+      sub: 'distintas',
       color: 'bg-amber-50 text-amber-600',
     },
     {
-      key: 'stockBajo',
-      value: products.filter(p => p.stock <= 5).length,
-      label: 'Stock Bajo',
-      sub: '≤ 5 unidades',
-      color: 'bg-red-50 text-red-500',
+      key: 'proveedores',
+      value: loadingProductos ? '...' : new Set(productos.map(p => p.NombreProveedor)).size,
+      label: 'Proveedores',
+      sub: 'activos',
+      color: 'bg-violet-50 text-violet-600',
     },
     {
       key: 'valor',
-      value: `$${totalValue.toLocaleString('es', { maximumFractionDigits: 0 })}`,
+      value: loadingProductos
+        ? '...'
+        : `S/ ${totalValorVenta.toLocaleString('es-PE', { minimumFractionDigits: 2 })}`,
       label: 'Valor Inventario',
-      sub: 'total en stock',
+      sub: 'precio de venta',
       color: 'bg-emerald-50 text-emerald-600',
     },
   ];
 
-  const byCategory = products.reduce<Record<string, number>>((acc, p) => {
-    acc[p.category] = (acc[p.category] || 0) + 1;
+  // Agrupar por categoría
+  const byCategory = productos.reduce<Record<string, number>>((acc, p) => {
+    const cat = p.NombreCategoria ?? 'Sin categoría';
+    acc[cat] = (acc[cat] || 0) + 1;
     return acc;
   }, {});
 
-  const lowStockProducts = products
-    .filter(p => p.stock <= 5)
-    .sort((a, b) => a.stock - b.stock)
-    .slice(0, 6);
+  // Productos con mayor margen (top 6)
+  const topMargen = [...productos]
+    .filter(p => p.MargenGanancia != null)
+    .sort((a, b) => Number(b.MargenGanancia) - Number(a.MargenGanancia))
+    .slice(0, 6)
+    .map(p => ({
+      id: String(p.IdNegocioProducto),
+      name: p.Nombre,
+      category: p.NombreCategoria ?? 'Sin categoría',
+      image: p.Imagen_url ?? '',
+      stock: 0,
+      price: p.PrecioVenta ?? 0,
+      description: p.Descripcion ?? '',
+      featured: false,
+      createdAt: p.FechaActualizacion ? new Date(p.FechaActualizacion) : new Date(),
+    }));
 
   return {
-    products,
+    productos,
+    loadingProductos,
     stats,
     byCategory,
-    lowStockProducts,
+    lowStockProducts: topMargen,   // alias usado por LowStockAlerts
+    // alias legacy
+    products: productos,
   };
 }

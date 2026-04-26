@@ -1,14 +1,14 @@
 import React from 'react';
 
-type SortBy = 'name' | 'price' | 'stock';
+type SortBy = 'nombre' | 'precio' | 'margen';
 
 interface Props {
-  search: string;
+  search:   string;
   onSearch: (value: string) => void;
-  sortBy: SortBy;
-  onSort: (value: SortBy) => void;
-  count: number;
-  onAdd: () => void;
+  sortBy:   SortBy;
+  onSort:   (value: SortBy) => void;
+  count:    number;
+  onAdd:    () => void;
 }
 
 export default function ProductsToolbar({ search, onSearch, sortBy, onSort, count, onAdd }: Props) {
@@ -35,9 +35,9 @@ export default function ProductsToolbar({ search, onSearch, sortBy, onSort, coun
           onChange={e => onSort(e.target.value as SortBy)}
           className="bg-white border border-zinc-200 rounded-xl px-3 py-2.5 text-sm text-zinc-700 outline-none cursor-pointer hover:border-zinc-950 transition-colors"
         >
-          <option value="name">Nombre A–Z</option>
-          <option value="price">Mayor precio</option>
-          <option value="stock">Menor stock</option>
+          <option value="nombre">Nombre A–Z</option>
+          <option value="precio">Mayor precio</option>
+          <option value="margen">Mayor margen</option>
         </select>
 
         <span className="text-xs text-zinc-400">

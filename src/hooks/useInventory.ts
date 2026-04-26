@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useStore } from '../context/StoreContext';
-import type { Product } from '../types';
+import type { Producto } from '../types';
 
 export type StockStatus = {
   label: string;
@@ -8,17 +8,17 @@ export type StockStatus = {
 };
 
 export function useInventory() {
-  const { products, deleteProduct } = useStore();
-  const [editingProduct, setEditingProduct] = useState<Product | undefined>(undefined);
+  const { productos, removeProducto } = useStore();
+  const [editingProduct, setEditingProduct] = useState<Producto | undefined>(undefined);
   const [modalOpen, setModalOpen] = useState(false);
   const [search, setSearch] = useState('');
 
-  const filtered = products.filter(p =>
-    p.name.toLowerCase().includes(search.toLowerCase()) ||
-    p.category.toLowerCase().includes(search.toLowerCase())
+  const filtered = productos.filter(p =>
+    p.Nombre.toLowerCase().includes(search.toLowerCase()) ||
+    (p.NombreCategoria ?? '').toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleEdit = (product: Product) => {
+  const handleEdit = (product: Producto) => {
     setEditingProduct(product);
     setModalOpen(true);
   };
@@ -28,17 +28,15 @@ export function useInventory() {
     setEditingProduct(undefined);
   };
 
-  const handleDelete = (product: Product) => {
-    if (confirm(`¿Eliminar "${product.name}"?`)) {
-      deleteProduct(product.id);
+  const handleDelete = async (product: Producto) => {
+    if (confirm(`¿Eliminar "${product.Nombre}"?`)) {
+      await removeProducto(product.IdNegocioProducto);
     }
   };
 
-  const stockStatus = (stock: number): StockStatus => {
-    if (stock === 0) return { label: 'Sin stock', cls: 'bg-red-100 text-red-600' };
-    if (stock <= 5)  return { label: 'Bajo',      cls: 'bg-amber-100 text-amber-700' };
-    return               { label: 'Normal',    cls: 'bg-emerald-100 text-emerald-700' };
-  };
+  // Sin campo stock en la BD por ahora → todos en "Normal"
+  const stockStatus = (_stock: number): StockStatus =>
+    ({ label: 'Normal', cls: 'bg-emerald-100 text-emerald-700' });
 
   return {
     filtered,
