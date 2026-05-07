@@ -1,7 +1,16 @@
+## CLONAR
+```bash
+git clone <url>
+cd rutaCarpeta
+
+```
+
 ## 🚀 Tecnologías usadas
 - React
 - TypeScript
 - Vite
+- TailwindCss
+- Axios
 
 ## 📦 Instalación
 
