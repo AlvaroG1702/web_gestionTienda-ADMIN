@@ -39,5 +39,6 @@ npm start
 
 
 ##  Imagenes
-![descripción](./principal.png)
-![inventario](./inventario.png)
+Tablero principal
+![Principal](principal.png)
+![Inventario](inventario.png)
