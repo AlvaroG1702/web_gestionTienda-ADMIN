@@ -40,5 +40,4 @@ npm start
 
 ##  Imagenes
 Tablero principal
-![Principal](principal.png)
-![Inventario](inventario.png)
+![Principal](Proy_tienda_admin_capture/principal.png)
