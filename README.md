@@ -17,3 +17,13 @@ cd print-server
 npm install
 cd ..
 ```
+
+##  Ejecucion
+
+```bash
+# 1. Correr proyecto web
+npm run dev
+# 2. Correr server de la impresora si hay impresora conectada al puerto COM, por defecto puerto3 y salida puerto 4, via bluehtooh/usb
+cd print server
+npm start
+```
