@@ -39,13 +39,13 @@ npm start
 
 
 ##  Imagenes
-# Tablero principal
+### Tablero principal
 ![Principal](Proy_tienda_admin_capture/principal.png)
-
+### Gestión inventario
 ![Gestión inventario](Proy_tienda_admin_capture/inventario.png)
-
+### Gestión productos
 ![Gestión Productos]((Proy_tienda_admin_capture/productos.png))
-
+### Productos cuyos tickets de precios queremos imprimir
 ![Conección con impresora termina](Proy_tienda_admin_capture/imprimir_tickets.png)
-
+### Gestión proveedores
 ![Gestión de proveedores](Proy_tienda_admin_capture/proveedores.png)
