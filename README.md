@@ -36,3 +36,7 @@ npm run dev
 cd print server
 npm start
 ```
+
+
+Imagenes
+##
