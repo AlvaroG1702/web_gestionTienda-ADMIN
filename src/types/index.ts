@@ -82,6 +82,11 @@ export type CartItem = {
   quantity: number;
 };
 
+export type PrintItem = {
+  producto: Producto;
+  quantity: number;
+};
+
 export type Category = {
   id: string;
   name: string;

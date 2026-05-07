@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import type { Product, CartItem, Producto, ProductoInput } from '../types';
+import type { Product, CartItem, PrintItem, Producto, ProductoInput } from '../types';
 import {
   getProductos,
   createProducto,
@@ -28,6 +28,14 @@ interface StoreContextType {
   clearCart:          () => void;
   cartTotal:          number;
   cartCount:          number;
+
+  // ── Cola de Impresión ──────────────────────────────────────────────────────
+  printQueue:           PrintItem[];
+  addToPrintQueue:      (producto: Producto) => void;
+  removeFromPrintQueue: (productoId: number) => void;
+  updatePrintQuantity:  (productoId: number, quantity: number) => void;
+  clearPrintQueue:      () => void;
+  printQueueCount:      number;
 
   // ── Legacy: alias de productos como Product[] para hooks existentes ────────
   products:      Product[];
@@ -61,6 +69,9 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
 
   // ── Estado del carrito ─────────────────────────────────────────────────────
   const [cart, setCart] = useState<CartItem[]>([]);
+
+  // ── Estado de la cola de impresión ─────────────────────────────────────────
+  const [printQueue, setPrintQueue] = useState<PrintItem[]>([]);
 
   // ── Carga inicial y recarga ────────────────────────────────────────────────
   const reloadProductos = useCallback(async () => {
@@ -141,6 +152,37 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const cartTotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
+  // ── Cola de Impresión ──────────────────────────────────────────────────────
+  const addToPrintQueue = (producto: Producto) => {
+    setPrintQueue(prev => {
+      const existing = prev.find(item => item.producto.IdNegocioProducto === producto.IdNegocioProducto);
+      if (existing) {
+        return prev.map(item =>
+          item.producto.IdNegocioProducto === producto.IdNegocioProducto
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [...prev, { producto, quantity: 1 }];
+    });
+  };
+
+  const removeFromPrintQueue = (productoId: number) =>
+    setPrintQueue(prev => prev.filter(item => item.producto.IdNegocioProducto !== productoId));
+
+  const updatePrintQuantity = (productoId: number, quantity: number) => {
+    if (quantity <= 0) { removeFromPrintQueue(productoId); return; }
+    setPrintQueue(prev =>
+      prev.map(item =>
+        item.producto.IdNegocioProducto === productoId ? { ...item, quantity } : item
+      )
+    );
+  };
+
+  const clearPrintQueue = () => setPrintQueue([]);
+
+  const printQueueCount = printQueue.reduce((sum, item) => sum + item.quantity, 0);
+
   return (
     <StoreContext.Provider value={{
       // ── API real
@@ -151,6 +193,8 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
       // ── carrito
       cart, addToCart, removeFromCart, updateCartQuantity, clearCart,
       cartTotal, cartCount,
+      // ── impresión
+      printQueue, addToPrintQueue, removeFromPrintQueue, updatePrintQuantity, clearPrintQueue, printQueueCount,
     }}>
       {children}
     </StoreContext.Provider>

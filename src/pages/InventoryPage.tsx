@@ -19,7 +19,7 @@ export default function InventoryPage() {
     handleClose,
   } = useProducts();
 
-  const { editProducto, loadingProductos, errorProductos, reloadProductos } = useStore();
+  const { editProducto, loadingProductos, errorProductos, reloadProductos, addToPrintQueue } = useStore();
 
   const handleToggleEstado = async (p: Producto) => {
     const nuevoEstado = !p.Estado;
@@ -129,6 +129,16 @@ export default function InventoryPage() {
 
             {/* Acciones */}
             <div className="flex items-center gap-1.5">
+              <button
+                onClick={() => addToPrintQueue(p)}
+                className="p-1.5 rounded-md text-zinc-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors"
+                title="Añadir a impresión"
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </button>
               <button
                 onClick={() => handleEdit(p)}
                 className="p-1.5 rounded-md text-zinc-400 hover:text-zinc-950 hover:bg-zinc-100 transition-colors"

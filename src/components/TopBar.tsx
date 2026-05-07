@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useStore } from '../context/StoreContext';
+import PrintDrawer from './PrintDrawer';
 
 interface TopBarProps {
   activeView: string;
@@ -9,19 +10,20 @@ interface TopBarProps {
 }
 
 const viewLabels: Record<string, string> = {
-  dashboard:   'Dashboard',
-  products:    'Gestión de Productos',
-  inventory:   'Gestión de Inventario',
+  dashboard: 'Dashboard',
+  products: 'Gestión de Productos',
+  inventory: 'Gestión de Inventario',
   proveedores: 'Proveedores',
-  orders:      'Pedidos',
-  analytics:   'Analíticas',
-  settings:    'Ajustes',
+  orders: 'Pedidos',
+  analytics: 'Analíticas',
+  settings: 'Ajustes',
 };
 
 export default function TopBar({ activeView, sidebarCollapsed, onToggleSidebar }: TopBarProps) {
   const { user, logout } = useAuth();
-  const { productos }    = useStore();
+  const { productos, printQueueCount } = useStore();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [printOpen, setPrintOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const initials = user?.Nombre
@@ -94,6 +96,24 @@ export default function TopBar({ activeView, sidebarCollapsed, onToggleSidebar }
           </span>
         )}
 
+        {/* Botón de Impresión */}
+        <button
+          onClick={() => setPrintOpen(true)}
+          className="relative p-2 text-zinc-400 hover:text-zinc-950 transition-colors ml-1"
+          aria-label="Imprimir etiquetas"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          {printQueueCount > 0 && (
+            <span className="absolute top-1 right-1 w-4 h-4 bg-emerald-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full ring-2 ring-white">
+              {printQueueCount}
+            </span>
+          )}
+        </button>
+
         <div className="w-px h-6 bg-zinc-200 mx-1" />
 
         {/* Avatar + dropdown */}
@@ -132,13 +152,13 @@ export default function TopBar({ activeView, sidebarCollapsed, onToggleSidebar }
               <div className="py-1">
                 <button className="w-full flex items-center gap-3 px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-50 transition-colors text-left">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" />
                   </svg>
                   Mi perfil
                 </button>
                 <button className="w-full flex items-center gap-3 px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-50 transition-colors text-left">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/>
+                    <circle cx="12" cy="12" r="3" /><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14" />
                   </svg>
                   Ajustes
                 </button>
@@ -152,7 +172,7 @@ export default function TopBar({ activeView, sidebarCollapsed, onToggleSidebar }
                   className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors text-left font-medium"
                 >
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+                    <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" />
                   </svg>
                   Cerrar sesión
                 </button>
@@ -161,6 +181,9 @@ export default function TopBar({ activeView, sidebarCollapsed, onToggleSidebar }
           )}
         </div>
       </div>
+
+      {/* Drawer de Impresión */}
+      <PrintDrawer open={printOpen} onClose={() => setPrintOpen(false)} />
     </header>
   );
 }
