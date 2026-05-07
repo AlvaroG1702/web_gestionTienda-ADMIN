@@ -44,7 +44,7 @@ npm start
 ### Gestión inventario
 ![Gestión inventario](Proy_tienda_admin_capture/inventario.png)
 ### Gestión productos
-![Gestión Productos]((Proy_tienda_admin_capture/productos.png))
+![Gestión Productos](Proy_tienda_admin_capture/productos.png)
 ### Productos cuyos tickets de precios queremos imprimir
 ![Conección con impresora termina](Proy_tienda_admin_capture/imprimir_tickets.png)
 ### Gestión proveedores
