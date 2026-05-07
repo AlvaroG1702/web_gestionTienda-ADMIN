@@ -38,5 +38,6 @@ npm start
 ```
 
 
-Imagenes
-##
+##  Imagenes
+![descripción](./principal.png)
+![inventario](./inventario.png)
